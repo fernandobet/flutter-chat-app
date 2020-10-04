@@ -1,8 +1,18 @@
-import 'package:chat_app/src/pages/login_page.dart';
+import 'package:chat_app/src/pages/chat_page.dart';
+import 'package:chat_app/src/providers/chat_page_provider.dart';
 import 'package:chat_app/src/routes/routes_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(
+MultiProvider(
+  providers: [
+    ChangeNotifierProvider(create: (_)=>ChatPageProvider(),),
+    ChangeNotifierProvider(create: (_)=>ListaMensajesProvider())
+  ],
+  child: MyApp(),
+)
+);
 
 class MyApp extends StatelessWidget {
   @override
@@ -11,7 +21,7 @@ class MyApp extends StatelessWidget {
       onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        initialRoute: LoginPage.ruta,
+        initialRoute: ChatPage.ruta,
         routes: rutas,
       ),
     );
