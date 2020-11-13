@@ -1,44 +1,51 @@
+import 'package:chat_app/src/helpers/mostrar_alerta.dart';
 import 'package:chat_app/src/models/user_model.dart';
+import 'package:chat_app/src/services/auth_service.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsuariosPage extends StatelessWidget {
   RefreshController _refreshController =
       RefreshController(initialRefresh: false);
   static final ruta = 'usuarios';
-  List<User> usuarios = [
-    User(
+  List<UsuarioDb> usuarios = [
+    UsuarioDb(
         nombre: 'Fernando',
         email: 'Fernando@gmail.com',
-        pass: '123',
-        uId: '1',
-        connect: true),
-    User(
+        uid: '1',
+        online: true),
+    UsuarioDb(
         nombre: 'Cecy',
         email: 'Cecy@gmail.com',
-        pass: '123',
-        uId: '2',
-        connect: false),
-    User(
+        uid: '2',
+        online: false),
+    UsuarioDb(
         nombre: 'Javier',
         email: 'Javier@gmail.com',
-        pass: '123',
-        uId: '3',
-        connect: true),
+        uid: '3',
+        online: true),
   ];
 
   @override
   Widget build(BuildContext context) {
+    final _usuario = Provider.of<AuthService>(context,listen: false).usuario;
     return Scaffold(
         appBar: AppBar(
           elevation: 1,
           backgroundColor: Colors.white,
-          leading: Icon(
+          leading: CupertinoButton(
+            child: Icon(
             Icons.exit_to_app,
             color: Colors.blue[200],
-          ),
+          ), 
+            onPressed: (){
+              AuthService.deleteToken();
+              Navigator.pushReplacementNamed(context, 'loading');
+            }),
           title: Text(
-            'Mis chats',
+            'Bienvenido ${_usuario.nombre}',
             style: TextStyle(color: Colors.black),
           ),
           actions: <Widget>[
@@ -73,7 +80,7 @@ class UsuariosPage extends StatelessWidget {
         itemCount: usuarios.length);
   }
 
-  Widget _crearRenglon(User usuario) {
+  Widget _crearRenglon(UsuarioDb usuario) {
     return ListTile(
       leading: CircleAvatar(child: Text(usuario.nombre.substring(0, 2))),
       title: Text('${usuario.nombre}'),
@@ -81,7 +88,7 @@ class UsuariosPage extends StatelessWidget {
       trailing: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(100),
-            color: usuario.connect ? Colors.green : Colors.red),
+            color: usuario.online ? Colors.green : Colors.red),
         height: 20,
         width: 20,
       ),

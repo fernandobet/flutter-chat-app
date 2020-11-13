@@ -6,8 +6,10 @@ final IconData icon;
 final String hintText;
 final TextEditingController controller;
 final TextInputType keyBoardType;
+final Function validator;
 
-  CustomInput({@required this.obscureText, @required this.icon, @required this.hintText, @required this.controller,@required this.keyBoardType});
+  CustomInput({@required this.obscureText, @required this.icon, @required this.hintText, 
+  @required this.controller,@required this.keyBoardType,@required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +21,8 @@ final TextInputType keyBoardType;
         color:Colors.white
       ),
       width: 280,
-      child: TextField(
+      child: TextFormField(
+        validator: validator,
         keyboardType: this.keyBoardType,
         controller: this.controller,
         obscureText: this.obscureText,
